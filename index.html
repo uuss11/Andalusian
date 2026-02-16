@@ -3,104 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مخطوطة الأندلس القديمة</title>
+    <title>مخطوطة العصر الجاهلي</title>
     <style>
-        /* استدعاء ملفك الخاص بالضبط */
+        /* استدعاء احترافي ومضمون */
         @font-face {
-            font-family: 'MyAndalusFont';
-            src: url('Andalus.ttf') format('truetype'); /* استدعاء الملف اللي عندك */
+            font-family: 'AncientAndalus'; /* اسم فريد حتى ما يتضارب ويه خطوط النظام */
+            src: url('Andalus.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap; /* يخلي النص يظهر فوراً ويبدل الخط اول ما يتحمل */
         }
 
         body {
-            /* ألوان شاحبة وترابية (عصر الجاهلية) */
-            background-color: #2b1d0e; 
+            background-color: #1a120b; /* لون بني غامق جداً */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            /* خلفية توحي بالقدم */
+            background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
         }
 
-        /* تصميم الورقة المتهالكة */
-        .parchment {
-            background-color: #c2a371; /* لون جوزي باهت */
-            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png'); /* ملمس ورقي */
-            width: 80%;
-            max-width: 600px;
-            padding: 50px;
-            border: 2px solid #5d4037;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 100px rgba(71, 45, 12, 0.4);
+        /* ورقة المخطوطة المتهالكة */
+        .paper {
+            background-color: #d2b48c; /* لون بيج شاحب */
+            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            width: 85%;
+            max-width: 650px;
+            padding: 60px 40px;
             position: relative;
             text-align: center;
-            /* حواف غير متساوية كأنها ممزقة */
-            border-radius: 10px 30px 15px 40px / 40px 15px 30px 10px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 80px rgba(60, 40, 20, 0.5);
+            
+            /* حواف متهرية */
+            border: 2px solid #4e342e;
+            border-radius: 5px 20px 10px 25px / 25px 10px 20px 5px;
         }
 
-        /* حقل العرض - يستخدم خط الأندلس حصراً */
-        #output-text {
-            font-family: 'MyAndalusFont', serif;
-            font-size: 4rem;
-            color: #3e2723; /* لون حبر قديم */
-            margin-bottom: 30px;
-            min-height: 1.2em;
+        /* حقل عرض النص - هنا نستخدم الخط اللي استدعيناه */
+        #display {
+            font-family: 'AncientAndalus', serif;
+            font-size: 5rem;
+            color: #3e2723; /* لون حبر قديم باهت */
+            min-height: 120px;
+            margin-bottom: 40px;
+            line-height: 1.2;
             word-wrap: break-word;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            /* تأثير حبر قديم */
+            filter: sepia(0.5) contrast(1.2);
         }
 
         /* حقل الإدخال */
         input {
             width: 100%;
-            background: transparent;
+            background: rgba(0,0,0,0.05);
             border: none;
-            border-bottom: 1px solid #5d4037;
-            font-family: 'MyAndalusFont', serif;
-            font-size: 1.5rem;
-            color: #3e2723;
+            border-bottom: 2px solid #5d4037;
+            font-family: 'AncientAndalus', serif;
+            font-size: 1.8rem;
+            color: #2b1d0e;
             text-align: center;
             outline: none;
             padding: 10px;
         }
 
-        input::placeholder {
-            color: rgba(62, 39, 35, 0.5);
-            font-size: 1rem;
-        }
-
-        /* زخارف بسيطة قديمة */
-        .decoration {
-            font-size: 1.5rem;
-            color: #5d4037;
-            margin-bottom: 20px;
-            opacity: 0.6;
+        .status {
+            font-size: 0.8rem;
+            color: #795548;
+            margin-top: 15px;
+            font-family: sans-serif;
         }
     </style>
 </head>
 <body>
 
-    <div class="parchment">
-        <div class="decoration">📜</div>
-        
-        <div id="output-text">اكتب هنا..</div>
+    <div class="paper">
+        <div id="display">أهلاً بك في العصر الجاهلي</div>
 
-        <input type="text" id="input-field" placeholder="انقش كلماتك على الرق..." oninput="updateText()">
+        <input type="text" id="box" placeholder="انقش هنا..." oninput="sync()">
         
-        <div class="decoration" style="margin-top:20px;">♰</div>
+        <div class="status" id="font-check">جاري فحص الخط...</div>
     </div>
 
     <script>
-        function updateText() {
-            const input = document.getElementById('input-field');
-            const output = document.getElementById('output-text');
-            
-            if(input.value.length > 0) {
-                output.innerText = input.value;
-            } else {
-                output.innerText = "اكتب هنا..";
-            }
+        function sync() {
+            const input = document.getElementById('box');
+            const output = document.getElementById('display');
+            output.innerText = input.value || "أهلاً بك في العصر الجاهلي";
         }
+
+        // كود برمجي صغير للفحص: هل المتصفح كدر يوصل للملف؟
+        document.fonts.load('1em AncientAndalus').then(function() {
+            if (document.fonts.check('1em AncientAndalus')) {
+                document.getElementById('font-check').innerText = "✅ ملف Andalus.ttf شغال تمام";
+                document.getElementById('font-check').style.color = "green";
+            } else {
+                document.getElementById('font-check').innerText = "❌ ملف الخط موجود بس ما جاي يتحمل (تأكد من اسم الملف)";
+                document.getElementById('font-check').style.color = "red";
+            }
+        });
     </script>
 
 </body>
 </html>
-
